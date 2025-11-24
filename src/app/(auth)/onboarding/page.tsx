@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 const experienceLevels = ['Beginner', 'Intermediate', 'Advanced', 'Professional'];
 const sectors = [
   'Technology',

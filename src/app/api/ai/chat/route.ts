@@ -1,11 +1,29 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { aiRouter } from '@/lib/ai/router';
-import { openRouterService, MODELS } from '@/lib/ai/openrouter';
-import { redis } from '@/lib/redis';
-import { prisma } from '@/lib/prisma';
-import { YahooFinanceService } from '@/lib/yahoo-finance-service';
-import { YahooDataFormatter } from '@/lib/ai/yahoo-data-formatter';
+
+// Dynamic imports to avoid build-time execution issues
+async function getServices() {
+  const [
+    { aiRouter },
+    { openRouterService, MODELS },
+    { redis },
+    { prisma },
+    { YahooFinanceService },
+    { YahooDataFormatter },
+  ] = await Promise.all([
+    import('@/lib/ai/router'),
+    import('@/lib/ai/openrouter'),
+    import('@/lib/redis'),
+    import('@/lib/prisma'),
+    import('@/lib/yahoo-finance-service'),
+    import('@/lib/ai/yahoo-data-formatter'),
+  ]);
+
+  return { aiRouter, openRouterService, MODELS, redis, prisma, YahooFinanceService, YahooDataFormatter };
+}
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
   const { userId } = await auth();
@@ -14,6 +32,9 @@ export async function POST(req: Request) {
   }
 
   try {
+    // Load services dynamically
+    const { aiRouter, openRouterService, MODELS, redis, prisma, YahooFinanceService, YahooDataFormatter } = await getServices();
+
     const { 
       query, 
       ticker,
@@ -268,6 +289,9 @@ export async function GET(req: Request) {
   }
 
   try {
+    // Load services dynamically
+    const { openRouterService, MODELS, redis, YahooFinanceService, YahooDataFormatter } = await getServices();
+
     // Check cache
     const cacheKey = `twitter:sentiment:${ticker}`;
     const cached = redis ? await redis.get(cacheKey) : null;
