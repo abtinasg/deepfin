@@ -4,73 +4,173 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    color-scheme: dark;
+    --font-sans: var(--font-inter), 'SF Pro Display', 'SF Pro Rounded', 'Inter', 'system-ui', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'SF Pro Display', 'Inter', 'system-ui', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: var(--font-jetbrains-mono), 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --layer-00: 228 33% 3%;
+    --layer-01: 224 33% 6%;
+    --layer-02: 223 38% 11%;
+    --layer-03: 226 37% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --surface-01: 221 31% 10%;
+    --surface-02: 222 33% 15%;
+    --surface-03: 219 33% 19%;
+    --surface-highlight: 221 30% 21%;
 
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 210 40% 98%;
+    --accent-01: 219 100% 65%;
+    --accent-02: 251 100% 68%;
+    --accent-03: 167 70% 59%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --positive: 148 59% 56%;
+    --positive-strong: 152 64% 33%;
+    --negative: 0 84% 68%;
+    --negative-strong: 348 63% 40%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --text-primary: 231 54% 97%;
+    --text-secondary: 224 27% 74%;
+    --text-muted: 223 14% 49%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --background: var(--layer-00);
+    --foreground: var(--text-primary);
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --card: var(--surface-01);
+    --card-foreground: var(--text-primary);
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 217.2 91.2% 59.8%;
+    --popover: var(--surface-02);
+    --popover-foreground: var(--text-primary);
 
-    --radius: 0.75rem;
+    --primary: var(--accent-01);
+    --primary-foreground: 222.2 47% 11%;
+
+    --secondary: var(--surface-highlight);
+    --secondary-foreground: var(--text-primary);
+
+    --muted: var(--layer-03);
+    --muted-foreground: var(--text-muted);
+
+    --accent: var(--accent-02);
+    --accent-foreground: var(--text-primary);
+
+    --destructive: var(--negative);
+    --destructive-foreground: var(--text-primary);
+
+    --border: 223 30% 18%;
+    --input: 223 35% 22%;
+    --ring: var(--accent-01);
+
+    --radius: 1rem;
+
+    --shadow-soft: 0 12px 30px -20px rgba(0, 0, 0, 0.8);
+    --shadow-glow: 0 20px 80px -40px rgba(76, 139, 255, 0.6);
+
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+
+    --text-h1: 2rem;
+    --text-h1-line: 2.375rem;
+    --text-h2: 1.75rem;
+    --text-h2-line: 2.25rem;
+    --text-h3: 1.5rem;
+    --text-h3-line: 1.9rem;
+    --text-h4: 1.25rem;
+    --text-h4-line: 1.75rem;
+    --text-h5: 1.125rem;
+    --text-h5-line: 1.6rem;
+    --text-h6: 1rem;
+    --text-h6-line: 1.4rem;
+    --text-body: 0.9375rem;
+    --text-body-line: 1.5rem;
+    --text-mono: 0.875rem;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+  .light {
+    color-scheme: light;
+    --background: 220 23% 97%;
+    --foreground: 222 40% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 12%;
+    --secondary: 220 22% 94%;
+    --secondary-foreground: 222 40% 18%;
+    --muted: 220 20% 92%;
+    --muted-foreground: 223 15% 45%;
+    --border: 220 20% 86%;
+    --input: 220 20% 86%;
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border antialiased;
   }
+
   body {
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body-line);
     @apply bg-background text-foreground;
+    background-image: radial-gradient(circle at top, rgba(124, 58, 237, 0.08), transparent 45%),
+      radial-gradient(circle at 20% 20%, rgba(76, 139, 255, 0.08), transparent 35%);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+    color: hsl(var(--text-primary));
+  }
+
+  h1 {
+    font-size: var(--text-h1);
+    line-height: var(--text-h1-line);
+    font-weight: 600;
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    line-height: var(--text-h2-line);
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: var(--text-h3);
+    line-height: var(--text-h3-line);
+    font-weight: 600;
+  }
+
+  h4 {
+    font-size: var(--text-h4);
+    line-height: var(--text-h4-line);
+    font-weight: 600;
+  }
+
+  h5 {
+    font-size: var(--text-h5);
+    line-height: var(--text-h5-line);
+    font-weight: 600;
+  }
+
+  h6 {
+    font-size: var(--text-h6);
+    line-height: var(--text-h6-line);
+    font-weight: 600;
+  }
+
+  code,
+  .mono-metric {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+    letter-spacing: -0.02em;
   }
 }

@@ -34,8 +34,40 @@ export async function getQuote(symbol: string): Promise<Quote> {
   return getCachedData(
     cacheKey,
     async () => {
-      // In production, integrate with Alpha Vantage, Finnhub, or Polygon
-      // For now, return mock data
+      // Try Finnhub API first
+      const apiKey = process.env.NEXT_PUBLIC_FINNHUB_API_KEY || process.env.FINNHUB_API_KEY;
+      
+      if (apiKey) {
+        try {
+          const response = await fetch(
+            `https://finnhub.io/api/v1/quote?symbol=${symbol.toUpperCase()}&token=${apiKey}`
+          );
+
+          if (response.ok) {
+            const data = await response.json();
+            
+            if (data.c) {
+              return {
+                symbol: symbol.toUpperCase(),
+                price: data.c,
+                change: data.d || 0,
+                changePercent: data.dp || 0,
+                volume: 0, // Finnhub quote doesn't include volume
+                high: data.h || 0,
+                low: data.l || 0,
+                open: data.o || 0,
+                previousClose: data.pc || 0,
+                timestamp: new Date(data.t * 1000).toISOString(),
+              };
+            }
+          }
+        } catch (error) {
+          console.error('Finnhub API error:', error);
+        }
+      }
+
+      // Fallback to mock data if API fails or is not configured
+      console.warn(`Using mock data for ${symbol}`);
       return {
         symbol: symbol.toUpperCase(),
         price: Math.random() * 500 + 50,
@@ -65,13 +97,53 @@ export async function getMarketIndices(): Promise<MarketIndex[]> {
   return getCachedData(
     cacheKey,
     async () => {
-      // In production, fetch from market data API
-      return [
-        { name: 'S&P 500', symbol: 'SPX', value: 4567.89, change: 56.12, changePercent: 1.23 },
-        { name: 'NASDAQ', symbol: 'NDX', value: 14234.56, change: 126.45, changePercent: 0.89 },
-        { name: 'DOW', symbol: 'DJI', value: 35678.9, change: -160.23, changePercent: -0.45 },
-        { name: 'VIX', symbol: 'VIX', value: 18.45, change: 0.43, changePercent: 2.34 },
+      const apiKey = process.env.NEXT_PUBLIC_FINNHUB_API_KEY || process.env.FINNHUB_API_KEY;
+      const indices: MarketIndex[] = [];
+
+      const symbols = [
+        { symbol: '^GSPC', name: 'S&P 500' },
+        { symbol: '^IXIC', name: 'NASDAQ' },
+        { symbol: '^DJI', name: 'DOW' },
+        { symbol: '^VIX', name: 'VIX' },
       ];
+
+      if (apiKey) {
+        for (const idx of symbols) {
+          try {
+            const response = await fetch(
+              `https://finnhub.io/api/v1/quote?symbol=${idx.symbol}&token=${apiKey}`
+            );
+
+            if (response.ok) {
+              const data = await response.json();
+              if (data.c) {
+                indices.push({
+                  name: idx.name,
+                  symbol: idx.symbol,
+                  value: data.c,
+                  change: data.d || 0,
+                  changePercent: data.dp || 0,
+                });
+              }
+            }
+          } catch (error) {
+            console.error(`Error fetching ${idx.symbol}:`, error);
+          }
+        }
+      }
+
+      // Fallback to mock if API failed
+      if (indices.length === 0) {
+        console.warn('Using mock data for indices');
+        return [
+          { name: 'S&P 500', symbol: 'SPX', value: 4567.89, change: 56.12, changePercent: 1.23 },
+          { name: 'NASDAQ', symbol: 'NDX', value: 14234.56, change: 126.45, changePercent: 0.89 },
+          { name: 'DOW', symbol: 'DJI', value: 35678.9, change: -160.23, changePercent: -0.45 },
+          { name: 'VIX', symbol: 'VIX', value: 18.45, change: 0.43, changePercent: 2.34 },
+        ];
+      }
+
+      return indices;
     },
     30
   );

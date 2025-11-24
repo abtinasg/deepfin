@@ -22,19 +22,33 @@ export async function GET(request: Request) {
     const quote = await getCachedData(
       cacheKey,
       async () => {
-        // In production, this would fetch from a market data API
-        // For now, return mock data
+        // Fetch from Finnhub API
+        const apiKey = process.env.FINNHUB_API_KEY;
+        if (!apiKey) {
+          throw new Error('FINNHUB_API_KEY not configured');
+        }
+
+        const response = await fetch(
+          `https://finnhub.io/api/v1/quote?symbol=${symbol.toUpperCase()}&token=${apiKey}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`Finnhub API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
         return {
           symbol: symbol.toUpperCase(),
-          price: 178.45,
-          change: 2.34,
-          changePercent: 1.33,
-          volume: 45678900,
-          high: 180.12,
-          low: 176.23,
-          open: 176.89,
-          previousClose: 176.11,
-          timestamp: new Date().toISOString(),
+          price: data.c || 0, // current price
+          change: data.d || 0, // change
+          changePercent: data.dp || 0, // percent change
+          volume: 0, // Finnhub quote doesn't include volume
+          high: data.h || 0,
+          low: data.l || 0,
+          open: data.o || 0,
+          previousClose: data.pc || 0,
+          timestamp: new Date(data.t * 1000).toISOString(),
         };
       },
       60 // Cache for 60 seconds
