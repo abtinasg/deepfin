@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 // DELETE - Delete a saved screen by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const { userId } = await auth();
@@ -16,7 +16,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await context.params;
 
     // Find the screen first to verify ownership
     const screen = await prisma.savedScreen.findUnique({
@@ -58,7 +58,7 @@ export async function DELETE(
 // GET - Get a specific saved screen by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const { userId } = await auth();
@@ -67,7 +67,7 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await context.params;
 
     const screen = await prisma.savedScreen.findUnique({
       where: { id },
@@ -108,7 +108,7 @@ export async function GET(
 // PATCH - Update a saved screen
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const { userId } = await auth();
@@ -117,7 +117,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await context.params;
     const body = await request.json();
 
     // Find the screen first to verify ownership

@@ -8,7 +8,7 @@ import { prisma } from '@/lib/prisma';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const { userId } = await auth();
@@ -20,7 +20,7 @@ export async function GET(
       );
     }
 
-    const { id } = params;
+    const { id } = await context.params;
 
     // For now, return a mock response
     // In production, uncomment:
@@ -68,7 +68,7 @@ export async function GET(
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const { userId } = await auth();
@@ -80,7 +80,7 @@ export async function PATCH(
       );
     }
 
-    const { id } = params;
+    const { id } = await context.params;
     const body = await request.json();
     const { name, config } = body;
 
@@ -142,7 +142,7 @@ export async function PATCH(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const { userId } = await auth();
@@ -154,7 +154,7 @@ export async function DELETE(
       );
     }
 
-    const { id } = params;
+    const { id } = await context.params;
 
     // For now, return success
     // In production, uncomment:

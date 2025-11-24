@@ -19,10 +19,11 @@ const CACHE_TTL = 5; // 5 seconds
 
 export async function GET(
   request: Request,
-  { params }: { params: { ticker: string } }
+  context: { params: Promise<{ ticker: string }> }
 ) {
   try {
-    const ticker = params.ticker.toUpperCase();
+    const { ticker: tickerParam } = await context.params;
+    const ticker = tickerParam.toUpperCase();
     const cacheKey = `stock:${ticker}`;
 
     // Try cache first (if Redis is available)

@@ -18,10 +18,11 @@ const CACHE_TTL = 30; // 30 seconds for chart data
 
 export async function GET(
   request: Request,
-  { params }: { params: { ticker: string } }
+  context: { params: Promise<{ ticker: string }> }
 ) {
   try {
-    const ticker = params.ticker.toUpperCase();
+    const { ticker: tickerParam } = await context.params;
+    const ticker = tickerParam.toUpperCase();
     const { searchParams } = new URL(request.url);
     const timeframe = searchParams.get('timeframe') || '1Y';
 
