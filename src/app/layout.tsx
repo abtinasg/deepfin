@@ -19,10 +19,10 @@ export const metadata: Metadata = {
   description: 'Bloomberg Terminal meets AI. Professional market analysis simplified.',
 };
 
-// Check if Clerk is configured
+// Check if Clerk is configured (accepts both test and production keys)
 const isClerkConfigured = () => {
   const key = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-  return key && !key.includes('pk_test_') && key.length > 20;
+  return key && key.length > 20;
 };
 
 export default function RootLayout({
@@ -44,42 +44,29 @@ export default function RootLayout({
       fontFamily: 'Inter, sans-serif',
     },
     elements: {
-      formButtonPrimary: 
+      formButtonPrimary:
         'bg-blue-600 hover:bg-blue-700 text-white shadow-sm hover:shadow-md transition-all',
-      card: 
-        'bg-white shadow-sm border border-gray-100 rounded-2xl',
-      headerTitle: 
-        'text-2xl font-bold text-gray-900',
-      headerSubtitle: 
-        'text-gray-600',
-      formFieldInput: 
-        'border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all',
-      footerActionLink: 
-        'text-blue-600 hover:text-blue-700 font-medium',
-      identityPreviewText: 
-        'text-gray-700',
-      socialButtonsBlockButton: 
-        'border-gray-200 hover:bg-gray-50 transition-all rounded-xl',
+      card: 'bg-white shadow-sm border border-gray-100 rounded-2xl',
+      headerTitle: 'text-2xl font-bold text-gray-900',
+      headerSubtitle: 'text-gray-600',
+      formFieldInput: 'border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all',
+      footerActionLink: 'text-blue-600 hover:text-blue-700 font-medium',
+      identityPreviewText: 'text-gray-700',
+      socialButtonsBlockButton: 'border-gray-200 hover:bg-gray-50 transition-all rounded-xl',
     },
   };
 
   const content = (
     <html lang="en">
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
-        <QueryProvider>
-          {children}
-        </QueryProvider>
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );
 
   // Only wrap with ClerkProvider if configured
   if (clerkConfigured) {
-    return (
-      <ClerkProvider appearance={clerkAppearance}>
-        {content}
-      </ClerkProvider>
-    );
+    return <ClerkProvider appearance={clerkAppearance}>{content}</ClerkProvider>;
   }
 
   // Return without ClerkProvider during build or when not configured
