@@ -2,15 +2,47 @@ import { SignIn } from '@clerk/nextjs';
 
 export default function SignInPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
-      <SignIn
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+      {/* Logo and Welcome */}
+      <div className="text-center mb-8">
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center text-2xl font-bold text-white">
+            D
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Deep Terminal
+          </h1>
+        </div>
+        <p className="text-xl text-gray-600">
+          Welcome back 👋
+        </p>
+        <p className="text-gray-500 mt-1">
+          Professional market analysis, simplified
+        </p>
+      </div>
+
+      {/* Clerk Sign In Component */}
+      <SignIn 
         appearance={{
           elements: {
-            rootBox: 'mx-auto',
-            card: 'shadow-xl',
+            rootBox: "mx-auto",
+            card: "shadow-xl",
           },
         }}
+        redirectUrl="/dashboard"
+        signUpUrl="/sign-up"
       />
+
+      {/* Footer */}
+      <p className="mt-8 text-sm text-gray-600">
+        New to Deep Terminal?{' '}
+        <a 
+          href="/sign-up" 
+          className="text-blue-600 hover:text-blue-700 font-medium"
+        >
+          Create account →
+        </a>
+      </p>
     </div>
   );
 }

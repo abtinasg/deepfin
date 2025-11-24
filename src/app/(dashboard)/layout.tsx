@@ -1,4 +1,4 @@
-import { UserButton } from '@clerk/nextjs';
+import { CustomUserButton } from '@/components/shared/user-button';
 import Link from 'next/link';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -9,38 +9,40 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-8">
               <Link href="/dashboard" className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg" />
-                <span className="text-xl font-bold">Deep Terminal</span>
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white text-sm font-bold">
+                  D
+                </div>
+                <span className="text-xl font-bold text-gray-900">Deep Terminal</span>
               </Link>
               <nav className="hidden md:flex items-center gap-6">
                 <Link
                   href="/dashboard"
-                  className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
                 >
                   Markets
                 </Link>
                 <Link
                   href="/screener"
-                  className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
                 >
                   Screener
                 </Link>
                 <Link
                   href="/charts"
-                  className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
                 >
                   Charts
                 </Link>
                 <Link
                   href="/portfolio"
-                  className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
                 >
                   Portfolio
                 </Link>
               </nav>
             </div>
             <div className="flex items-center gap-4">
-              <UserButton afterSignOutUrl="/" />
+              <CustomUserButton />
             </div>
           </div>
         </div>
