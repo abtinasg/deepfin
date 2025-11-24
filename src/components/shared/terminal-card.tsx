@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from 'framer-motion';
+import { motion, Transition } from 'framer-motion';
 import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -27,6 +27,11 @@ export function TerminalCard({
 }: TerminalCardProps) {
   const Wrapper = isInteractive ? motion.section : 'section';
 
+  const transitionConfig: Transition = {
+    duration: 0.4,
+    ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+  };
+
   return (
     <Wrapper
       className={cn(
@@ -37,7 +42,7 @@ export function TerminalCard({
       )}
       initial={isInteractive ? { opacity: 0, y: 12 } : undefined}
       animate={isInteractive ? { opacity: 1, y: 0 } : undefined}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      transition={isInteractive ? transitionConfig : undefined}
     >
       {(title || subtitle || actions) && (
         <header className="flex flex-col gap-1 sm:flex-row sm:items-center">
