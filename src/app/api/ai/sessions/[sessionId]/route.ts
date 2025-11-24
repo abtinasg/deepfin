@@ -6,16 +6,19 @@ import { auth } from '@clerk/nextjs/server';
 // TODO: Uncomment after running prisma migrate
 export async function GET(
   req: Request,
-  { params }: { params: { sessionId: string } }
+  context: { params: Promise<{ sessionId: string }> }
 ) {
   const { userId } = await auth();
   if (!userId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  // Await params in Next.js 15
+  const { sessionId } = await context.params;
+
   // Temporarily return empty session until migration is run
   return NextResponse.json({ 
-    id: params.sessionId, 
+    id: sessionId, 
     userId, 
     title: 'Chat Session',
     messages: [],
@@ -26,7 +29,7 @@ export async function GET(
   // try {
   //   const session = await prisma.chatSession.findFirst({
   //     where: {
-  //       id: params.sessionId,
+  //       id: sessionId,
   //       userId,
   //     },
   //     include: {
@@ -51,12 +54,15 @@ export async function GET(
 // TODO: Uncomment after running prisma migrate
 export async function DELETE(
   req: Request,
-  { params }: { params: { sessionId: string } }
+  context: { params: Promise<{ sessionId: string }> }
 ) {
   const { userId } = await auth();
   if (!userId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  // Await params in Next.js 15
+  const { sessionId } = await context.params;
 
   // Temporarily return success until migration is run
   return NextResponse.json({ success: true });
@@ -64,7 +70,7 @@ export async function DELETE(
   // try {
   //   await prisma.chatSession.deleteMany({
   //     where: {
-  //       id: params.sessionId,
+  //       id: sessionId,
   //       userId,
   //     },
   //   });
