@@ -24,7 +24,46 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        baseTheme: undefined,
+        variables: {
+          colorPrimary: '#3B82F6', // Blue-600
+          colorText: '#111827',
+          colorBackground: '#FFFFFF',
+          colorInputBackground: '#FFFFFF',
+          colorInputText: '#111827',
+          borderRadius: '0.75rem', // rounded-xl
+          fontFamily: 'Inter, sans-serif',
+        },
+        elements: {
+          // Customize form elements
+          formButtonPrimary: 
+            'bg-blue-600 hover:bg-blue-700 text-white shadow-sm hover:shadow-md transition-all',
+          
+          card: 
+            'bg-white shadow-sm border border-gray-100 rounded-2xl',
+          
+          headerTitle: 
+            'text-2xl font-bold text-gray-900',
+          
+          headerSubtitle: 
+            'text-gray-600',
+          
+          formFieldInput: 
+            'border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all',
+          
+          footerActionLink: 
+            'text-blue-600 hover:text-blue-700 font-medium',
+          
+          identityPreviewText: 
+            'text-gray-700',
+          
+          socialButtonsBlockButton: 
+            'border-gray-200 hover:bg-gray-50 transition-all rounded-xl',
+        },
+      }}
+    >
       <html lang="en">
         <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
           {children}
