@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from 'react';
-import { motion } from 'framer-motion';
+import { motion, Transition } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 export type DataStateProps = {
@@ -15,7 +15,10 @@ export type DataStateProps = {
   className?: string;
 };
 
-const fadeConfig = { duration: 0.3, ease: [0.22, 1, 0.36, 1] };
+const fadeConfig: Transition = {
+  duration: 0.3,
+  ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+};
 
 export function DataState({
   isLoading,
