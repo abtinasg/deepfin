@@ -2,25 +2,40 @@ import { NextResponse } from 'next/server';
 import { Redis } from '@upstash/redis';
 import OpenAI from 'openai';
 
-// Initialize Redis with error handling
-let redis: Redis | null = null;
-try {
-  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-    const url = process.env.UPSTASH_REDIS_REST_URL;
-    if (url.startsWith('https://') && url.includes('upstash.io')) {
-      redis = Redis.fromEnv();
-    }
-  }
-} catch (error) {
-  console.warn('Redis initialization failed:', error);
-}
-
 const CACHE_TTL = 3600; // 1 hour for AI summaries
 
-const openai = new OpenAI({
-  baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: process.env.OPENROUTER_API_KEY,
-});
+// Helper to get Redis client safely
+function getRedisClient(): Redis | null {
+  try {
+    if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+      const url = process.env.UPSTASH_REDIS_REST_URL;
+      if (url.startsWith('https://') && url.includes('upstash.io')) {
+        return Redis.fromEnv();
+      }
+    }
+  } catch (error) {
+    console.warn('Redis initialization failed:', error);
+  }
+  return null;
+}
+
+// Helper to get OpenAI client safely
+function getOpenAIClient(): OpenAI | null {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  
+  if (!apiKey || apiKey.includes('...')) {
+    console.warn('OpenRouter API key not configured');
+    return null;
+  }
+
+  return new OpenAI({
+    baseURL: 'https://openrouter.ai/api/v1',
+    apiKey,
+  });
+}
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function GET(
   request: Request,
@@ -31,6 +46,9 @@ export async function GET(
     const ticker = tickerParam.toUpperCase();
     const cacheKey = `stock:ai:${ticker}`;
 
+    // Get Redis client
+    const redis = getRedisClient();
+
     // Try cache first (if Redis is available)
     if (redis) {
       const cached = await redis.get(cacheKey);
@@ -39,10 +57,29 @@ export async function GET(
       }
     }
 
+    // Get OpenAI client
+    const openai = getOpenAIClient();
+
+    // If OpenAI is not configured, return a fallback response
+    if (!openai) {
+      return NextResponse.json({
+        ticker,
+        summary: 'AI analysis unavailable. Please configure OpenRouter API key.',
+        sentiment: 'neutral',
+        confidence: 0,
+        lastUpdate: Date.now(),
+      });
+    }
+
     // Fetch stock data for context
     const stockResponse = await fetch(
       `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/stock/${ticker}`
     );
+    
+    if (!stockResponse.ok) {
+      throw new Error('Failed to fetch stock data');
+    }
+    
     const stockData = await stockResponse.json();
 
     // Generate AI summary
