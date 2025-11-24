@@ -46,13 +46,37 @@ export async function POST(req: Request) {
   if (eventType === 'user.created') {
     const { id } = evt.data;
 
-    // Create a basic user profile
-    await prisma.userProfile.create({
-      data: {
-        clerkUserId: id,
-        onboardingCompleted: false,
-      },
-    });
+    try {
+      // Create a basic user profile
+      const profile = await prisma.userProfile.create({
+        data: {
+          clerkUserId: id,
+          onboardingCompleted: false,
+        },
+      });
+
+      // Create default watchlist for the new user
+      await prisma.watchlist.create({
+        data: {
+          userId: id,
+          name: 'My Watchlist',
+        },
+      });
+
+      // Create default portfolio for the new user
+      await prisma.portfolio.create({
+        data: {
+          userId: id,
+          name: 'My Portfolio',
+          description: 'Your default portfolio',
+        },
+      });
+
+      console.log(`User ${id} created with default watchlist and portfolio`);
+    } catch (error) {
+      console.error('Error creating user profile:', error);
+      // Don't return error, just log it
+    }
   }
 
   if (eventType === 'user.deleted') {

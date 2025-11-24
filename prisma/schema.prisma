@@ -36,8 +36,10 @@ model Portfolio {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  user     UserProfile @relation(fields: [userId], references: [clerkUserId])
-  holdings Holding[]
+  user         UserProfile         @relation(fields: [userId], references: [clerkUserId])
+  holdings     Holding[]
+  transactions Transaction[]
+  snapshots    PortfolioSnapshot[]
 
   @@map("portfolios")
 }
@@ -54,7 +56,43 @@ model Holding {
 
   portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 
+  @@index([portfolioId])
   @@map("holdings")
+}
+
+model Transaction {
+  id              String   @id @default(uuid())
+  portfolioId     String   @map("portfolio_id")
+  ticker          String   @db.VarChar(10)
+  type            String   @db.VarChar(10) // 'buy' or 'sell'
+  shares          Decimal  @db.Decimal(10, 2)
+  price           Decimal  @db.Decimal(10, 2)
+  fees            Decimal  @default(0) @db.Decimal(10, 2)
+  transactionDate DateTime @map("transaction_date") @db.Date
+  notes           String?
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@index([portfolioId])
+  @@index([transactionDate])
+  @@map("transactions")
+}
+
+model PortfolioSnapshot {
+  id            String   @id @default(uuid())
+  portfolioId   String   @map("portfolio_id")
+  totalValue    Decimal  @db.Decimal(12, 2)
+  totalGainLoss Decimal  @map("total_gain_loss") @db.Decimal(12, 2)
+  snapshotDate  DateTime @map("snapshot_date") @db.Date
+  holdings      Json // Store holdings data as JSON
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@unique([portfolioId, snapshotDate])
+  @@index([portfolioId, snapshotDate])
+  @@map("portfolio_snapshots")
 }
 
 model Watchlist {
@@ -99,8 +137,78 @@ model SavedScreen {
   id          String   @id @default(uuid())
   userId      String   @map("user_id")
   name        String
+  description String?
   filtersJson Json     @map("filters_json")
   createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
+  @@index([userId])
   @@map("saved_screens")
+}
+
+model ScreenerCache {
+  ticker    String   @id @db.VarChar(10)
+  data      Json
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([updatedAt])
+  @@map("screener_cache")
+}
+
+model ChartLayout {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  name      String
+  config    Json     // Stores ChartConfig as JSON
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("chart_layouts")
+}
+
+model AiUsage {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  model       String   // e.g., "anthropic/claude-sonnet-4.5"
+  tokensUsed  Int      @map("tokens_used")
+  cost        Float    // in USD
+  query       String
+  timestamp   DateTime @default(now())
+
+  @@index([userId])
+  @@index([timestamp])
+  @@map("ai_usage")
+}
+
+model ChatSession {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  title       String   @default("New Chat")
+  context     Json?    // Portfolio, watchlist, current symbol, etc.
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  messages    ChatMessage[]
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id          String   @id @default(uuid())
+  sessionId   String   @map("session_id")
+  role        String   // "user" | "assistant" | "system"
+  content     String   @db.Text
+  model       String?  // Which AI model was used
+  tokensUsed  Int?     @map("tokens_used")
+  cost        Float?   // Cost in USD
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  session     ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([createdAt])
+  @@map("chat_messages")
 }

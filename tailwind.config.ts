@@ -17,6 +17,36 @@ const config: Config = {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        layer: {
+          0: 'hsl(var(--layer-00))',
+          1: 'hsl(var(--layer-01))',
+          2: 'hsl(var(--layer-02))',
+          3: 'hsl(var(--layer-03))',
+        },
+        surface: {
+          1: 'hsl(var(--surface-01))',
+          2: 'hsl(var(--surface-02))',
+          3: 'hsl(var(--surface-03))',
+          highlight: 'hsl(var(--surface-highlight))',
+        },
+        accentTone: {
+          1: 'hsl(var(--accent-01))',
+          2: 'hsl(var(--accent-02))',
+          3: 'hsl(var(--accent-03))',
+        },
+        positive: {
+          DEFAULT: 'hsl(var(--positive))',
+          strong: 'hsl(var(--positive-strong))',
+        },
+        negative: {
+          DEFAULT: 'hsl(var(--negative))',
+          strong: 'hsl(var(--negative-strong))',
+        },
+        textTone: {
+          primary: 'hsl(var(--text-primary))',
+          secondary: 'hsl(var(--text-secondary))',
+          muted: 'hsl(var(--text-muted))',
+        },
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
@@ -49,8 +79,21 @@ const config: Config = {
         bear: '#EF4444',
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'sans-serif'],
-        mono: ['var(--font-jetbrains-mono)', 'monospace'],
+        sans: ['var(--font-sans)', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'Inter', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'JetBrains Mono', 'monospace'],
+      },
+      spacing: {
+        'space-1': 'var(--space-1)',
+        'space-2': 'var(--space-2)',
+        'space-3': 'var(--space-3)',
+        'space-4': 'var(--space-4)',
+        'space-6': 'var(--space-6)',
+        'space-8': 'var(--space-8)',
+      },
+      boxShadow: {
+        soft: 'var(--shadow-soft)',
+        glow: 'var(--shadow-glow)',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -58,6 +101,10 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       keyframes: {
+        shimmer: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
         'accordion-down': {
           from: { height: '0' },
           to: { height: 'var(--radix-accordion-content-height)' },
@@ -68,6 +115,7 @@ const config: Config = {
         },
       },
       animation: {
+        shimmer: 'shimmer 1.6s ease-in-out infinite',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
