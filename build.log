@@ -1,0 +1,63 @@
+
+> deepfin@0.1.0 build
+> next build
+
+ ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/abtin/package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * /Users/abtin/Desktop/deepfin/deepfin/package-lock.json
+
+   ▲ Next.js 16.0.3 (Turbopack)
+   - Environments: .env
+
+ ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 6.4s
+   Running TypeScript ...
+   Collecting page data using 7 workers ...
+Redis initialization failed: Error [UrlError]: Upstash Redis client was passed an invalid URL. You should pass a URL starting with https. Received: "https://...upstash.io". 
+    at new m (.next/server/chunks/6e4ee_@upstash_redis_nodejs_mjs_24cdd9c9._.js:1:1435)
+    at new s (.next/server/chunks/6e4ee_@upstash_redis_nodejs_mjs_24cdd9c9._.js:1:57032)
+    at s.fromEnv (.next/server/chunks/6e4ee_@upstash_redis_nodejs_mjs_24cdd9c9._.js:1:58318)
+    at module evaluation (.next/server/chunks/[root-of-the-server]__f7d73056._.js:1:6892)
+    at instantiateModule (.next/server/chunks/[turbopack]_runtime.js:715:9)
+    at instantiateRuntimeModule (.next/server/chunks/[turbopack]_runtime.js:743:12)
+    at getOrInstantiateRuntimeModule (.next/server/chunks/[turbopack]_runtime.js:756:12)
+    at Object.m (.next/server/chunks/[turbopack]_runtime.js:765:18)
+    at Object.<anonymous> (.next/server/app/api/stock/[ticker]/route.js:8:3)
+Redis initialization failed: Error [UrlError]: Upstash Redis client was passed an invalid URL. You should pass a URL starting with https. Received: "https://...upstash.io". 
+    at new m (.next/server/chunks/6e4ee_@upstash_redis_nodejs_mjs_24cdd9c9._.js:1:1435)
+    at new s (.next/server/chunks/6e4ee_@upstash_redis_nodejs_mjs_24cdd9c9._.js:1:57032)
+    at s.fromEnv (.next/server/chunks/6e4ee_@upstash_redis_nodejs_mjs_24cdd9c9._.js:1:58318)
+    at module evaluation (.next/server/chunks/[root-of-the-server]__aef50353._.js:1:6892)
+    at instantiateModule (.next/server/chunks/[turbopack]_runtime.js:715:9)
+    at instantiateRuntimeModule (.next/server/chunks/[turbopack]_runtime.js:743:12)
+    at getOrInstantiateRuntimeModule (.next/server/chunks/[turbopack]_runtime.js:756:12)
+    at Object.m (.next/server/chunks/[turbopack]_runtime.js:765:18)
+    at Object.<anonymous> (.next/server/app/api/stock/[ticker]/metrics/route.js:8:3)
+Redis initialization failed: Error [UrlError]: Upstash Redis client was passed an invalid URL. You should pass a URL starting with https. Received: "https://...upstash.io". 
+    at new m (.next/server/chunks/6e4ee_@upstash_redis_nodejs_mjs_24cdd9c9._.js:1:1435)
+    at new s (.next/server/chunks/6e4ee_@upstash_redis_nodejs_mjs_24cdd9c9._.js:1:57032)
+    at s.fromEnv (.next/server/chunks/6e4ee_@upstash_redis_nodejs_mjs_24cdd9c9._.js:1:58318)
+    at module evaluation (.next/server/chunks/[root-of-the-server]__b11d3aca._.js:1:6892)
+    at instantiateModule (.next/server/chunks/[turbopack]_runtime.js:715:9)
+    at instantiateRuntimeModule (.next/server/chunks/[turbopack]_runtime.js:743:12)
+    at getOrInstantiateRuntimeModule (.next/server/chunks/[turbopack]_runtime.js:756:12)
+    at Object.m (.next/server/chunks/[turbopack]_runtime.js:765:18)
+    at Object.<anonymous> (.next/server/app/api/stock/[ticker]/chart/route.js:8:3)
+   Generating static pages using 7 workers (0/33) ...
+   Generating static pages using 7 workers (8/33) 
+   Generating static pages using 7 workers (16/33) 
+Error occurred prerendering page "/dashboard/ai". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: @clerk/clerk-react: UserButton can only be used within the <ClerkProvider /> component. Learn more: https://clerk.com/docs/components/clerk-provider
+    at Object.throwMissingClerkProviderError (.next/server/chunks/ssr/6e4ee_@clerk_shared_dist_runtime_36d19f36._.js:12:1657)
+    at <unknown> (.next/server/chunks/ssr/6e4ee_@clerk_clerk-react_dist_chunk-MV5LDDHP_mjs_e3b2882e._.js:1:3122)
+    at aO (.next/server/chunks/ssr/6e4ee_@clerk_shared_dist_runtime_36d19f36._.js:12:28548)
+    at F (.next/server/chunks/ssr/6e4ee_@clerk_clerk-react_dist_chunk-MV5LDDHP_mjs_e3b2882e._.js:1:3114)
+    at e (.next/server/chunks/ssr/6e4ee_@clerk_clerk-react_dist_chunk-MV5LDDHP_mjs_e3b2882e._.js:1:5224) {
+  digest: '933179763'
+}
+Export encountered an error on /dashboard/ai/page: /dashboard/ai, exiting the build.
+ ⨯ Next.js build worker exited with code: 1 and signal: null

@@ -7,12 +7,22 @@ const isRedisConfigured =
   !process.env.UPSTASH_REDIS_REST_URL.includes('...') &&
   !process.env.UPSTASH_REDIS_REST_TOKEN.includes('...');
 
-export const redis = isRedisConfigured 
-  ? new Redis({
+// Initialize Redis with try/catch to prevent build errors
+let redisInstance: Redis | null = null;
+if (isRedisConfigured) {
+  try {
+    redisInstance = new Redis({
       url: process.env.UPSTASH_REDIS_REST_URL!,
       token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-    })
-  : null;
+    });
+    console.log('✅ Redis initialized successfully');
+  } catch (error) {
+    console.error('Redis initialization failed:', error);
+    redisInstance = null;
+  }
+}
+
+export const redis = redisInstance;
 
 // Helper functions
 export async function getCachedData<T>(

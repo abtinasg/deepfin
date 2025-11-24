@@ -2,6 +2,8 @@ import { YahooFinanceService } from '@/lib/yahoo-finance-service';
 import { StockPageClient } from '@/components/stock/stock-page-client';
 import { StockQuote, StockMetrics } from '@/types/stock';
 
+export const dynamic = 'force-dynamic';
+
 interface StockPageProps {
   params: Promise<{
     ticker: string;
