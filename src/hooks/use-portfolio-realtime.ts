@@ -119,17 +119,22 @@ export function usePortfolioRealtime(portfolioId?: string) {
 
   // Update portfolio with real-time prices
   useEffect(() => {
-    if (!portfolio || !marketData || Object.keys(marketData).length === 0) {
+    if (!portfolio || !marketData || marketData.length === 0) {
       setRealtimePortfolio(portfolio);
       return;
     }
+
+    // Convert array to map for O(1) lookup
+    const marketDataMap = new Map(
+      marketData.map((quote) => [quote.symbol, quote])
+    );
 
     let totalValue = 0;
     let totalCost = 0;
     let totalDayChange = 0;
 
     const updatedHoldings = portfolio.holdings.map((holding) => {
-      const quote = marketData[holding.ticker];
+      const quote = marketDataMap.get(holding.ticker);
       const currentPrice = quote?.price || holding.currentPrice;
       const dayChange = quote?.change || 0;
       const dayChangePercent = quote?.changePercent || 0;

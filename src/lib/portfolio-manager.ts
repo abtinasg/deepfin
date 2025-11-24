@@ -36,7 +36,11 @@ export class PortfolioManager {
     );
 
     const priceMap = new Map(
-      quotes.map((q) => [q.symbol, { price: q.price, change: q.change, changePercent: q.changePercent }])
+      quotes.map((q) => [q.symbol, { 
+        price: q.regularMarketPrice, 
+        change: q.regularMarketChange, 
+        changePercent: q.regularMarketChangePercent 
+      }])
     );
 
     let totalValue = 0;
@@ -272,15 +276,25 @@ export class PortfolioManager {
     // Fetch benchmark data if requested
     if (benchmark && chartData.length > 0) {
       try {
-        const benchmarkHistory = await yahooFinanceService.getHistory(
+        // Calculate appropriate range based on dates
+        const daysDiff = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+        let range: '1d' | '5d' | '1mo' | '3mo' | '6mo' | '1y' | '5y' = '1y';
+        
+        if (daysDiff <= 5) range = '5d';
+        else if (daysDiff <= 30) range = '1mo';
+        else if (daysDiff <= 90) range = '3mo';
+        else if (daysDiff <= 180) range = '6mo';
+        else if (daysDiff <= 365) range = '1y';
+        else range = '5y';
+
+        const benchmarkHistory = await yahooFinanceService.getHistoricalData(
           benchmark,
-          startDate,
-          endDate,
+          range,
           '1d'
         );
 
         const benchmarkMap = new Map(
-          benchmarkHistory.map((b) => [b.date.split('T')[0], b.close])
+          benchmarkHistory.map((b: any) => [b.date.split('T')[0], b.close])
         );
 
         // Normalize benchmark to portfolio starting value
