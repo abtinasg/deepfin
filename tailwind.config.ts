@@ -77,6 +77,20 @@ const config: Config = {
         },
         bull: '#10B981',
         bear: '#EF4444',
+        // Terminal-specific colors
+        terminal: {
+          bg: '#020617',
+          surface: '#0B1121',
+          border: 'rgba(255, 255, 255, 0.06)',
+          text: {
+            primary: '#FAFAFA',
+            secondary: '#CBD5E1',
+            tertiary: '#94A3B8',
+          },
+          orange: '#F97316',
+          blue: '#3B82F6',
+          cyan: '#06B6D4',
+        },
       },
       fontFamily: {
         sans: ['var(--font-sans)', 'Inter', 'system-ui', 'sans-serif'],
@@ -90,10 +104,38 @@ const config: Config = {
         'space-4': 'var(--space-4)',
         'space-6': 'var(--space-6)',
         'space-8': 'var(--space-8)',
+        // Terminal density tokens (Bloomberg-style)
+        'terminal-0': '0px',
+        'terminal-1': '2px',
+        'terminal-2': '4px',
+        'terminal-3': '6px',
+        'terminal-4': '8px',
+        'terminal-6': '12px',
+        'terminal-8': '16px',
+        'terminal-12': '24px',
+      },
+      fontSize: {
+        // Terminal typography (dense, Bloomberg-style)
+        'terminal-xs': '10px',
+        'terminal-sm': '11px',
+        'terminal-base': '12px',
+        'terminal-md': '13px',
+        'terminal-lg': '14px',
+        'terminal-xl': '16px',
+      },
+      lineHeight: {
+        // Terminal line heights
+        'terminal-tight': '1.2',
+        'terminal-snug': '1.35',
+        'terminal-normal': '1.5',
       },
       boxShadow: {
         soft: 'var(--shadow-soft)',
         glow: 'var(--shadow-glow)',
+        // Terminal glow effects
+        'glow-positive': '0 0 12px rgba(16, 185, 129, 0.2)',
+        'glow-negative': '0 0 12px rgba(239, 68, 68, 0.2)',
+        'glow-interactive': '0 0 16px rgba(129, 140, 248, 0.3)',
       },
       borderRadius: {
         lg: 'var(--radius)',
