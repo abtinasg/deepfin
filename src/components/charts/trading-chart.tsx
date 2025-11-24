@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import { ChartManager } from '@/lib/chart-manager';
 import { DrawingToolsManager } from '@/lib/drawing-tools';
 import { OHLCVData, ChartType, Timeframe, IndicatorConfig, ChartPreset, CHART_PRESETS } from '@/types/chart';
@@ -23,12 +24,17 @@ interface TradingChartProps {
   ticker: string;
   name?: string;
   initialData: OHLCVData[];
+  data?: OHLCVData[];
+  chartType?: ChartType;
+  showVolume?: boolean;
+  height?: number;
   onTimeframeChange?: (timeframe: Timeframe) => void;
   onSaveLayout?: () => void;
 }
 
 export function TradingChart({
   ticker,
+  initialData,
   data,
   chartType = 'candlestick',
   showVolume = true,
@@ -41,8 +47,11 @@ export function TradingChart({
   const [currentPrice, setCurrentPrice] = useState<number>(0);
   const [priceChange, setPriceChange] = useState<number>(0);
 
+  // Use data if provided, otherwise use initialData
+  const chartData = data || initialData;
+
   useEffect(() => {
-    if (!chartContainerRef.current) return;
+    if (!chartContainerRef.current || !chartData || chartData.length === 0) return;
 
     // Create main chart
     const chart = createChart(chartContainerRef.current, {
@@ -77,13 +86,13 @@ export function TradingChart({
         wickUpColor: '#26a69a',
         wickDownColor: '#ef5350',
       });
-      mainSeries.setData(data);
+      mainSeries.setData(chartData);
     } else if (chartType === 'line') {
       mainSeries = chart.addLineSeries({
         color: '#2196F3',
         lineWidth: 2,
       });
-      const lineData = data.map(d => ({ time: d.time, value: d.close }));
+      const lineData = chartData.map(d => ({ time: d.time, value: d.close }));
       mainSeries.setData(lineData);
     } else if (chartType === 'area') {
       mainSeries = chart.addAreaSeries({
@@ -92,14 +101,14 @@ export function TradingChart({
         lineColor: 'rgba(33, 150, 243, 1)',
         lineWidth: 2,
       });
-      const areaData = data.map(d => ({ time: d.time, value: d.close }));
+      const areaData = chartData.map(d => ({ time: d.time, value: d.close }));
       mainSeries.setData(areaData);
     }
 
     // Update current price
-    if (data.length > 0) {
-      const lastCandle = data[data.length - 1];
-      const prevCandle = data[data.length - 2];
+    if (chartData.length > 0) {
+      const lastCandle = chartData[chartData.length - 1];
+      const prevCandle = chartData[chartData.length - 2];
       setCurrentPrice(lastCandle.close);
       if (prevCandle) {
         const change = lastCandle.close - prevCandle.close;
@@ -131,10 +140,10 @@ export function TradingChart({
 
       volumeChartRef.current = volumeChart;
 
-      const volumeData = data.map((d, i) => ({
+      const volumeData = chartData.map((d, i) => ({
         time: d.time,
         value: d.volume,
-        color: i > 0 && d.close >= data[i - 1].close 
+        color: i > 0 && d.close >= chartData[i - 1].close 
           ? 'rgba(38, 166, 154, 0.5)' 
           : 'rgba(239, 83, 80, 0.5)',
       }));
@@ -179,7 +188,7 @@ export function TradingChart({
         volumeChartRef.current.remove();
       }
     };
-  }, [data, chartType, showVolume, height]);
+  }, [chartData, chartType, showVolume, height]);
 
   return (
     <div className="w-full">

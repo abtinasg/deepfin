@@ -18,10 +18,11 @@ const CACHE_TTL = 60; // 1 minute for metrics
 
 export async function GET(
   request: Request,
-  { params }: { params: { ticker: string } }
+  context: { params: Promise<{ ticker: string }> }
 ) {
   try {
-    const ticker = params.ticker.toUpperCase();
+    const { ticker: tickerParam } = await context.params;
+    const ticker = tickerParam.toUpperCase();
     const cacheKey = `metrics:${ticker}`;
 
     // Try cache first (if Redis is available)
