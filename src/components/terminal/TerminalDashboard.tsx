@@ -3,10 +3,15 @@
 import { TerminalLayout } from './TerminalLayout';
 import { IndicesGrid } from './left-column/IndicesGrid';
 import { SectorHeatmap } from './left-column/SectorHeatmap';
+import { MarketMoversTable } from './left-column/MarketMoversTable';
+import { FuturesGrid } from './left-column/FuturesGrid';
+import { ForexGrid } from './left-column/ForexGrid';
+import { BondYields } from './left-column/BondYields';
 import { QuickStatsBar } from './center-column/QuickStatsBar';
-import { ChartPlaceholder } from './center-column/ChartPlaceholder';
+import { NormalizedPerformanceChart } from './center-column/NormalizedPerformanceChart';
+import { SectorRotationMap } from './center-column/SectorRotationMap';
+import { MarketHeatmap } from './center-column/MarketHeatmap';
 import { AICopilotPanel } from './ai-copilot/AICopilotPanel';
-import { TerminalModule } from './TerminalModule';
 
 /**
  * TerminalDashboard - Bloomberg-style financial terminal
@@ -27,33 +32,17 @@ export function TerminalDashboard() {
           {/* Sector Performance */}
           <SectorHeatmap />
 
-          {/* Market Movers - Placeholder */}
-          <TerminalModule title="Market Movers" height="320px">
-            <div className="flex items-center justify-center h-full text-slate-500 text-terminal-sm">
-              Gainers / Losers / Active
-            </div>
-          </TerminalModule>
+          {/* Market Movers */}
+          <MarketMoversTable />
 
-          {/* Futures & Commodities - Placeholder */}
-          <TerminalModule title="Futures & Commodities" height="240px">
-            <div className="flex items-center justify-center h-full text-slate-500 text-terminal-sm">
-              Gold, Oil, Bitcoin, etc.
-            </div>
-          </TerminalModule>
+          {/* Futures & Commodities */}
+          <FuturesGrid />
 
-          {/* Currency Pairs - Placeholder */}
-          <TerminalModule title="Currency Pairs" height="180px">
-            <div className="flex items-center justify-center h-full text-slate-500 text-terminal-sm">
-              EUR/USD, GBP/USD, etc.
-            </div>
-          </TerminalModule>
+          {/* Currency Pairs */}
+          <ForexGrid />
 
-          {/* Bond Yields - Placeholder */}
-          <TerminalModule title="Bond Yields" height="180px">
-            <div className="flex items-center justify-center h-full text-slate-500 text-terminal-sm">
-              10Y, 30Y Treasury Yields
-            </div>
-          </TerminalModule>
+          {/* Bond Yields */}
+          <BondYields />
         </>
       }
       centerColumn={
@@ -62,21 +51,13 @@ export function TerminalDashboard() {
           <QuickStatsBar />
 
           {/* Main Terminal Chart */}
-          <ChartPlaceholder />
+          <NormalizedPerformanceChart />
 
-          {/* Sector Rotation Map - Placeholder */}
-          <TerminalModule title="Sector Rotation" height="320px">
-            <div className="flex items-center justify-center h-full text-slate-500 text-terminal-sm">
-              Quadrant chart visualization
-            </div>
-          </TerminalModule>
+          {/* Sector Rotation Map */}
+          <SectorRotationMap />
 
-          {/* Market Heatmap - Placeholder */}
-          <TerminalModule title="Market Heatmap" height="480px">
-            <div className="flex items-center justify-center h-full text-slate-500 text-terminal-sm">
-              Treemap of S&P 500 constituents
-            </div>
-          </TerminalModule>
+          {/* Market Heatmap */}
+          <MarketHeatmap />
         </>
       }
       rightColumn={<AICopilotPanel />}
