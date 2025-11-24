@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User profile linked to Clerk
+model UserProfile {
+  id                      String   @id @default(uuid())
+  clerkUserId             String   @unique @map("clerk_user_id")
+  experienceLevel         String?  @map("experience_level")
+  sectors                 String[]
+  investmentStyle         String[] @map("investment_style")
+  goals                   String[]
+  notificationPreferences Json?    @map("notification_preferences")
+  onboardingCompleted     Boolean  @default(false) @map("onboarding_completed")
+  subscriptionTier        String   @default("free") @map("subscription_tier")
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+
+  portfolios Portfolio[]
+  watchlists Watchlist[]
+  alerts     Alert[]
+
+  @@map("user_profiles")
+}
+
+model Portfolio {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  name        String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user     UserProfile @relation(fields: [userId], references: [clerkUserId])
+  holdings Holding[]
+
+  @@map("portfolios")
+}
+
+model Holding {
+  id           String   @id @default(uuid())
+  portfolioId  String   @map("portfolio_id")
+  ticker       String
+  shares       Decimal  @db.Decimal(10, 2)
+  costBasis    Decimal  @map("cost_basis") @db.Decimal(10, 2)
+  purchaseDate DateTime @map("purchase_date")
+  notes        String?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@map("holdings")
+}
+
+model Watchlist {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user  UserProfile     @relation(fields: [userId], references: [clerkUserId])
+  items WatchlistItem[]
+
+  @@map("watchlists")
+}
+
+model WatchlistItem {
+  id          String   @id @default(uuid())
+  watchlistId String   @map("watchlist_id")
+  ticker      String
+  addedAt     DateTime @default(now()) @map("added_at")
+
+  watchlist Watchlist @relation(fields: [watchlistId], references: [id], onDelete: Cascade)
+
+  @@unique([watchlistId, ticker])
+  @@map("watchlist_items")
+}
+
+model Alert {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  ticker    String
+  condition String   // 'price_above', 'price_below', 'volume_spike', etc.
+  threshold Decimal  @db.Decimal(10, 2)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user UserProfile @relation(fields: [userId], references: [clerkUserId])
+
+  @@map("alerts")
+}
+
+model SavedScreen {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  name        String
+  filtersJson Json     @map("filters_json")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("saved_screens")
+}
