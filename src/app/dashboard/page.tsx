@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
-import MarketsClient from '@/components/markets/markets-client';
+import { TerminalDashboard } from '@/components/terminal/TerminalDashboard';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,5 +11,5 @@ export default async function DashboardPage() {
     redirect('/sign-in');
   }
 
-  return <MarketsClient />;
+  return <TerminalDashboard />;
 }

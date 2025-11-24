@@ -173,4 +173,51 @@
     font-size: var(--text-mono);
     letter-spacing: -0.02em;
   }
+
+  /* Terminal-specific styles (Bloomberg-inspired) */
+  .terminal-mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+    letter-spacing: -0.01em;
+  }
+
+  .terminal-metric {
+    @apply terminal-mono font-medium text-terminal-md;
+  }
+
+  .terminal-label {
+    @apply text-terminal-xs uppercase tracking-wider font-medium;
+    color: hsl(var(--text-muted));
+  }
+
+  .terminal-value {
+    @apply terminal-mono text-terminal-md font-semibold;
+    color: hsl(var(--text-primary));
+  }
+
+  /* Terminal scrollbar styles */
+  .terminal-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 116, 139, 0.3) transparent;
+  }
+
+  .terminal-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .terminal-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .terminal-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 116, 139, 0.3);
+    border-radius: 3px;
+    transition: background-color 0.2s;
+  }
+
+  .terminal-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(100, 116, 139, 0.5);
+  }
 }
